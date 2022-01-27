@@ -10,8 +10,8 @@ namespace Diadoc.Api
 		string BoxId { get; set; }
 		string FilterCategory { get; set; }
 		string CounteragentBoxId { get; set; }
-		object TimestampFromValue { get; set; }
-		object TimestampToValue { get; set; }
+		object TimestampFromTicks { get; set; }
+		object TimestampToTicks { get; set; }
 		string FromDocumentDate { get; set; }
 		string ToDocumentDate { get; set; }
 		string DepartmentId { get; set; }
@@ -47,16 +47,25 @@ namespace Diadoc.Api
 		public string AfterIndexKey { get; set; }
 		public int? Count { get; set; }
 
-		public object TimestampFromValue
+
+		public object TimestampFromTicks
 		{
-			get => TimestampFrom;
-			set => TimestampFrom = (DateTime?) value;
+			get => TimestampFrom?
+				.ToUniversalTime()
+				.Ticks;
+			set => TimestampFrom = value == null
+				? (DateTime?) null
+				: new DateTime((long) value, DateTimeKind.Utc);
 		}
 
-		public object TimestampToValue
+		public object TimestampToTicks
 		{
-			get => TimestampTo;
-			set => TimestampTo = (DateTime?) value;
+			get => TimestampTo?
+				.ToUniversalTime()
+				.Ticks;
+			set => TimestampTo = value == null
+				? (DateTime?) null
+				: new DateTime((long) value, DateTimeKind.Utc);
 		}
 
 		public object CountValue
